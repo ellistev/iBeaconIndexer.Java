@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+    <TextView
+        android:id="@+id/btListItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/btListItemType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@+id/btListItemName" />
+    <TextView
+        android:id="@+id/btListItemStength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@+id/btListItemType" />
+    <TextView
+        android:id="@+id/btListItemMacAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+    <TextView
+        android:id="@+id/btListItemRaw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+</RelativeLayout><!-- From: file:/C:/Users/selliot/AndroidStudioProjects/BeaconIndexer/app/src/main/res/layout/bluetoothlistitemview.xml -->

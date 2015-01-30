@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentBottom="true">
+    <TextView
+        android:text="Found Devices:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/BlueToothResults"
+        android:height="100px"
+        android:scrollbars="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:clickable="true" />
+    <ListView
+        android:minWidth="25px"
+        android:minHeight="100px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/BlueToothResultsListView"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        android:clickable="true"
+        android:hapticFeedbackEnabled="true" />
+    <Button
+        android:text="Start Scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/startBlueToothButton" />
+    <Button
+        android:text="Stop Scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stopBlueToothButton" />
+</LinearLayout><!-- From: file:/C:/Users/selliot/AndroidStudioProjects/BeaconIndexer/app/src/main/res/layout/bluetoothview.xml -->
