@@ -1,4 +1,4 @@
-package selliot.beaconindexer;
+package selliot.ibeaconindexer;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
