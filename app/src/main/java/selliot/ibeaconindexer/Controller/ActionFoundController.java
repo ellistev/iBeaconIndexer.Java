@@ -6,22 +6,31 @@ package selliot.ibeaconindexer.Controller;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Parcelable;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import selliot.ibeaconindexer.Model.BluetoothObjects.BtDevice;
+import selliot.ibeaconindexer.Model.BluetoothObjects.DatabaseFunctions;
+import selliot.ibeaconindexer.Model.BluetoothObjects.ScannedBleDevice;
+import selliot.ibeaconindexer.R;
+import selliot.ibeaconindexer.Utils.BleParser;
+import selliot.ibeaconindexer.Utils.BtDeviceArrayAdapter;
 import selliot.ibeaconindexer.View.MainActivity;
 
-public class ActionFoundController extends BroadcastReceiver, BluetoothAdapter.LeScanCallback
+public class ActionFoundController extends BroadcastReceiver implements android.bluetooth.BluetoothAdapter.LeScanCallback
     {
     public List<BtDevice> btDeviceList = new ArrayList<BtDevice>();
     private List<String> btTextList;
@@ -30,10 +39,9 @@ public class ActionFoundController extends BroadcastReceiver, BluetoothAdapter.L
     public MainActivity mBlueToothDiscover;
     private List<BtDevice> newBtDeviceList;
     public TextView blueToothTextView;
-    private Data eFunctions database;
+    private DatabaseFunctions database;
     public ActionFoundController(){}
-
-    public ActionFoundController(MainActivity activity)
+        public ActionFoundController(MainActivity activity)
     {
         mBlueToothDiscover = activity;
         context = context;
@@ -54,8 +62,9 @@ public class ActionFoundController extends BroadcastReceiver, BluetoothAdapter.L
 
         for(Iterator<BtDevice> i = btDeviceList.iterator(); i.hasNext(); ) {
             BtDevice btDevice = i.next();
-            blueToothTextView.getText() += "\n" + count + ": " + btDevice.Name + ", " + btDevice.Type + ", " + btDevice.MacAddress +
-                    ", " + btDevice.Strength;
+            String currentBluetoothTextViewText = blueToothTextView.getText().toString();
+            blueToothTextView.setText(currentBluetoothTextViewText += "\n" + count + ": " + btDevice.Name + ", " + btDevice.Type + ", " + btDevice.MacAddress +
+                    ", " + btDevice.Strength);
             count++;
         }
 
@@ -66,102 +75,111 @@ public class ActionFoundController extends BroadcastReceiver, BluetoothAdapter.L
         //TextView blueToothTextView = mBlueToothDiscover != null ? mBlueToothDiscover.FindViewById<TextView>(Resource.Id.BlueToothResults) : null;
 
 
-        ListView blueToothListView = mBlueToothDiscover.FindViewById<ListView>(Resource.Id.BlueToothResultsListView);
+        ListView blueToothListView = (ListView) mBlueToothDiscover.findViewById(R.id.BlueToothResultsListView);
 
-        blueToothListView.ItemClick += blueToothListView_ItemClick;
+        blueToothListView.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                BtDevice device= adapter.GetBlueToothListItem(v.getId());// ? not sure if this is the correct way to get list item
+
+                device.MacAddress = "";
+
+                adapter.NotifyDataSetChanged ();
+            }
+        });
+
 
         //newBtDeviceList = btDeviceList.OrderByDescending(o => o.Strength).GroupBy(i => i.MacAddress).Select(g => g.First()).ToList();
 
-        adapter = new BtDeviceArrayAdapter(activity, activity.BaseContext, Android.Resource.Layout.SimpleListItem1);
-        List<BtDevices> btDevicesListFromDatabase = database.GetAllBtDevices();
-        adapter.AddList (btDevicesListFromDatabase);
-        blueToothListView.Adapter = adapter;
+        adapter = new BtDeviceArrayAdapter(activity, activity.getBaseContext(), android.R.layout.simple_list_item_1);
+        //List<BtDevice> btDevicesListFromDatabase = database.GetAllBtDevices();
+        //adapter.AddList (btDevicesListFromDatabase);
+        blueToothListView.setAdapter(adapter);
 
         //blueToothTextView.Text = "";
 
     }
 
-    void blueToothListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
-    {
-        BtDevices device= adapter.GetBlueToothListItem(e.Position);
-
-        device.MacAddress = "";
-
-        adapter.NotifyDataSetChanged ();
-
-    }
 
     public List<String> getPopulatedList(List<BtDevice> newBtDeviceList) {
         List<String> myList = new ArrayList<String>();
-        foreach(var btDevice in newBtDeviceList){
+
+        for(Iterator<BtDevice> i = newBtDeviceList.iterator(); i.hasNext(); ) {
+            BtDevice btDevice = i.next();
             myList.add(btDevice.Name + ", " + btDevice.Type + ", " + btDevice.MacAddress + ", " + btDevice.Strength);
         }
 
         return myList;
     }
 
-    public override void OnReceive(Context context, Intent intent)
+    public void onReceive(Context context, Intent intent)
     {
-        String action = intent.Action;
+        String action = intent.getAction();
         this.context = context;
         // blueToothTextView = mBlueToothDiscover != null ? mBlueToothDiscover.FindViewById<TextView>(Resource.Id.BlueToothResults) : null;
 
-        if (BluetoothDevice.ActionFound == action && blueToothTextView != null)
+        if (BluetoothDevice.ACTION_FOUND == action && blueToothTextView != null)
         {
-            BluetoothDevice device = (BluetoothDevice) intent.GetParcelableExtra(BluetoothDevice.ExtraDevice);
+            BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-            int rssi = intent.GetShortExtra(BluetoothDevice.ExtraRssi, Short.MinValue);
-            string uuid = (string)intent.GetParcelableExtra(BluetoothDevice.ExtraUuid);
+            int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
+            String uuid = intent.getParcelableExtra(BluetoothDevice.EXTRA_UUID).toString();
 
-            blueToothTextView.Text += "\n  Device: " + device.Name + ", " + device.Type + ", " + rssi + ", " + device;
+            blueToothTextView.setText(blueToothTextView.getText().toString() + "\n  Device: " + device.getName() + ", " + device.getType() + ", " + rssi + ", " + device);
             BtDevice btDevice = new BtDevice();
-            btDevice.Name = device.Name;
-            btDevice.Type = device.Type.ToString();
+            btDevice.Name = device.getName();
+            btDevice.Type = String.valueOf(device.getType());
             btDevice.Strength = rssi;
-            btDevice.MacAddress = device.ToString();
+            btDevice.MacAddress = device.toString();
             btDevice.Uuid = uuid;
-            btDeviceList.Add(btDevice);
+            btDeviceList.add(btDevice);
         }
         else
         {
-            if (BluetoothDevice.ActionPairingRequest == action)
+            if (BluetoothDevice.ACTION_PAIRING_REQUEST == action)
             {
-                BluetoothDevice device = (BluetoothDevice) intent.GetParcelableExtra(BluetoothDevice.ExtraDevice);
-                IParcelable[] uuidExtra = intent.GetParcelableArrayExtra(BluetoothDevice.ExtraUuid);
-                for (int i = 0; i < uuidExtra.Length; i++)
+                BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
+                for (int i = 0; i < uuidExtra.length; i++)
                 {
-                    blueToothTextView.Text += "\n  Device: " + device.Name + ", " + device + ", Service: " +
-                            uuidExtra[i].ToString();
+                    blueToothTextView.setText(blueToothTextView.getText() +  "\n  Device: " + device.getName() + ", " + device + ", Service: " +
+                            uuidExtra[i].toString());
                 }
             }
             else
             {
-                if (BluetoothAdapter.ActionDiscoveryStarted == action)
+                if (BluetoothAdapter.ACTION_DISCOVERY_STARTED == action)
                 {
-                    blueToothTextView.Text += "\nDiscovery Started...";
+                    blueToothTextView.append("\nDiscovery Started...");
                 }
             }
         }
 
-        if (BluetoothAdapter.ActionDiscoveryFinished == action && blueToothTextView != null)
+        if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action && blueToothTextView != null)
         {
-            blueToothTextView.Text += "\nDiscovery Stopped For Some Reason...";
+            blueToothTextView.append("\nDiscovery Stopped For Some Reason...");
 
         }
     }
 
-    public void OnLeScan (BluetoothDevice device, int rssi, byte[] scanRecord)
+    public void onLeScan (BluetoothDevice device, int rssi, byte[] scanRecord)
     {
-        ScannedBleDevice parsedLEDevice = new BLEParser().ParseRawScanRecord (device, rssi, scanRecord, null);
+        ScannedBleDevice parsedLEDevice = new BleParser().ParseRawScanRecord (device, rssi, scanRecord, null);
 
         if (parsedLEDevice != null) {
-            blueToothTextView = mBlueToothDiscover != null ? mBlueToothDiscover.FindViewById<TextView>(Resource.Id.BlueToothResults) : null;
+            blueToothTextView = mBlueToothDiscover != null ? (TextView)mBlueToothDiscover.findViewById(R.id.BlueToothResults) : null;
             BtDevice btDevice = new BtDevice (parsedLEDevice);
             int newBtDeviceId;
 
             //get gps location and
-            String location = mBlueToothDiscover.CheckLocation ();
-            Locations locationName = database.GetLocationName (btDevice.UuidString, btDevice.MajorInt, btDevice.MinorInt);
+            String location = null;
+            try {
+                location = mBlueToothDiscover.CheckLocation ();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //Locations locationName = database.GetLocationName (btDevice.UuidString, btDevice.MajorInt, btDevice.MinorInt);
 
 
             btDeviceList.add (btDevice);
@@ -170,13 +188,16 @@ public class ActionFoundController extends BroadcastReceiver, BluetoothAdapter.L
             Location currentLocation = mBlueToothDiscover.GetCurrentLocationObject ();
 
 
-            GPSLocation newGpsLocation = new GPSLocation();
-            newGpsLocation.LatitudeLongitude = String.Format ("{0},{1}", currentLocation != null ? currentLocation.Latitude.ToString() : "", currentLocation != null ? currentLocation.Longitude.ToString() : "");
-            newGpsLocation.Address = location;
-            newGpsLocation.Altitude = currentLocation != null ? currentLocation.Altitude.ToString() : "";
-            newBtDeviceId = database.AddUpdateBtDevice (btDevice, newGpsLocation);
+            //GPSLocation newGpsLocation = new GPSLocation();
+            //newGpsLocation.LatitudeLongitude = String.Format ("{0},{1}", currentLocation != null ? currentLocation.Latitude.ToString() : "", currentLocation != null ? currentLocation.Longitude.ToString() : "");
+            ////newGpsLocation.Address = location;
+            //newGpsLocation.Altitude = currentLocation != null ? currentLocation.Altitude.ToString() : "";
+            //newBtDeviceId = database.AddUpdateBtDevice (btDevice, newGpsLocation);
 
-            blueToothTextView.getText() += "\n Device found: " + btDevice.UuidString + ":" + btDevice.MajorInt + ":" + btDevice.MinorInt + " You are at " + locationName.Name + "(" + String.Format ("{0},{1}", currentLocation != null ? currentLocation.Latitude.ToString() : "", currentLocation != null ? currentLocation.Longitude.ToString() : "") + location + ")";
+            blueToothTextView.setText(blueToothTextView.getText() + "\n Device found: " + btDevice.UuidString + ":" + btDevice.MajorInt + ":" + btDevice.MinorInt
+                    + " You are at " + "(" + String.format ("{0},{1}",
+                    currentLocation != null ? currentLocation.getLatitude() : "",
+                    currentLocation != null ? currentLocation.getLongitude() : "") + location + ")");
 
             OutputBlueToothList(mBlueToothDiscover);
         }
@@ -196,10 +217,6 @@ public class ActionFoundController extends BroadcastReceiver, BluetoothAdapter.L
             double accuracy =  (0.89976)*Math.pow(ratio, 7.7095) + 0.111;
             return accuracy;
         }
+    }
 
-
-
-
-}
-
-}
+    }
