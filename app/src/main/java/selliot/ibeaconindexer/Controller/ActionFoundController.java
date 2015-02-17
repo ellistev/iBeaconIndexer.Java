@@ -77,18 +77,17 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
         ListView blueToothListView = (ListView) mBlueToothDiscover.findViewById(R.id.BlueToothResultsListView);
 
-        blueToothListView.setOnClickListener( new View.OnClickListener() {
+        blueToothListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
-            public void onClick(View v) {
-                BtDevice device= adapter.GetBlueToothListItem(v.getId());// ? not sure if this is the correct way to get list item
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BtDevice device= adapter.GetBlueToothListItem(view.getId());// ? not sure if this is the correct way to get list item
 
                 device.MacAddress = "";
 
                 adapter.NotifyDataSetChanged ();
             }
         });
-
 
         //newBtDeviceList = btDeviceList.OrderByDescending(o => o.Strength).GroupBy(i => i.MacAddress).Select(g => g.First()).ToList();
 
