@@ -43,7 +43,7 @@ public class BtDevice
         this.Name = !TextUtils.isEmpty(device.DeviceName) ? device.DeviceName : "";
         this.Type = device.getClass().toString();
         this.MacAddress = device.MacAddress;
-        this.Strength = Integer.parseInt(String.valueOf(device.RSSI));
+        this.Strength = (int) device.RSSI;
         this.Uuid = device.IbeaconProximityUUID.toString();
         this.UuidString = device.IbeaconProximityUUIDString;
         this.Major = device.Major.toString();

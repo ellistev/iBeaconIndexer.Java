@@ -46,11 +46,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
         InitializeLocationManager();
 
-        //blueToothTextView = FindViewById<TextView>(Resource.Id.BlueToothResults);
         blueToothListView = (ListView) findViewById(R.id.BlueToothResultsListView);
 
-        //blueToothTextView.MovementMethod = new ScrollingMovementMethod();
-        //Register the BroadcastReceiver
         receiver = new ActionFoundController(this);
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothDevice.ACTION_UUID);
@@ -59,42 +56,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
         registerReceiver(receiver, filter); // Don't forget to unregister during onDestroy
 
-        // Getting the Bluetooth adapter
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         //blueToothTextView.Text += "\nAdapter: " + btAdapter;
 
-        //Button startButton = findViewById(R.id.startBlueToothButton);
-        //startButton.callOnClick() += (object sender, EventArgs e) =>
-        //{
-            //blueToothTextView.SetHeight(1200);
             blueToothListView.setMinimumHeight(0);
             CheckBTState();
-            receiver.OutputBlueToothList(this);
-            //btAdapter.StartDiscovery();
-        //};
-
-        //Button stopButton = findViewById(R.id.stopBlueToothButton);
-        //stopButton.Click += (object sender, EventArgs e) =>
-        //{
-        //    btAdapter.stopLeScan(receiver);
-        //    receiver.OutputBlueToothList(this);
-        //};
     }
 
     private void CheckBTState() {
-        // Check for Bluetooth support and then check to make sure it is turned on
-        // If it isn't request to turn it on
-        // List paired devices
-        // Emulator doesn't support Bluetooth and will return null
         if(btAdapter==null) {
-            //blueToothTextView.Text += "\nBluetooth NOT supported. Aborting.";
             return;
         } else {
             if (btAdapter.isEnabled()) {
-                //blueToothTextView.Text += "\nBluetooth is enabled...";
-
-                //btAdapter.StartDiscovery ();
-
                 btAdapter.startLeScan(receiver);
             } else {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -106,10 +79,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     public void InitializeLocationManager()
     {
         _locationManager = (LocationManager) this.getBaseContext().getSystemService(LOCATION_SERVICE);
-        Criteria criteriaForLocationService = new Criteria()
-        {
-
-        };
+        Criteria criteriaForLocationService = new Criteria();
+        criteriaForLocationService.setAccuracy(Criteria.NO_REQUIREMENT);
         List<String> acceptableLocationProviders = _locationManager.getProviders(criteriaForLocationService, true);
 
         if (acceptableLocationProviders.size() > 0)

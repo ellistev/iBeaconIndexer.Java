@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ private Activity _activity;
     public  View GetView(int position, View convertView, ViewGroup parent)
     {
     View view = convertView == null ? convertView : _activity.getLayoutInflater().inflate(R.layout.bluetooth_list_item_view, parent, false);
-    TextView deviceName = (TextView)view.findViewById(R.id.BlueToothResultsListView);
+    TextView deviceName = (TextView)view.findViewById(R.id.btListItemName);
     TextView deviceType = (TextView)view.findViewById(R.id.btListItemType);
     TextView deviceStrength = (TextView)view.findViewById(R.id.btListItemStength);
     TextView deviceMacAddress = (TextView)view.findViewById(R.id.btListItemMacAddress);

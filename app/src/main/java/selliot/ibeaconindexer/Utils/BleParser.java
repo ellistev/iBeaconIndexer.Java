@@ -69,10 +69,10 @@ public class BleParser
 
             //Here is your UUID
             parsedObj.IbeaconProximityUUIDString =  hexString.substring(0, 8) + "-" +
-                    hexString.substring(8, 4) + "-" +
-                    hexString.substring(12, 4) + "-" +
-                    hexString.substring(16, 4) + "-" +
-                    hexString.substring(20, 12);
+                    hexString.substring(8, 12) + "-" +
+                    hexString.substring(12, 16) + "-" +
+                    hexString.substring(16, 20) + "-" +
+                    hexString.substring(20, 32);
 
             byte[] major = new byte[2];
             byte[] minor = new byte[2];
