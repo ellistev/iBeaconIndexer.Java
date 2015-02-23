@@ -53,8 +53,8 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
     public void ClearBlueToothList()
     {
-        btDeviceList.clear();
-        btTextList.clear();
+        //btDeviceList.clear();
+        //btTextList.clear();
     }
 
     public void PrintFullBlueToothList()
@@ -81,17 +81,17 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BtDevice device= adapter.GetBlueToothListItem(view.getId());// ? not sure if this is the correct way to get list item
+                BtDevice device= adapter.getBlueToothListItem(view.getId());// ? not sure if this is the correct way to get list item
 
                 device.MacAddress = "";
 
-                adapter.NotifyDataSetChanged ();
+                adapter.notifyDataSetChanged ();
             }
         });
 
         adapter = new BtDeviceArrayAdapter(activity, activity.getBaseContext(), android.R.layout.simple_list_item_1);
 
-        adapter.AddList(btDeviceList);
+        adapter.addList(btDeviceList);
 
         blueToothListView.setAdapter(adapter);
 

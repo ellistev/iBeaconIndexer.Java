@@ -59,8 +59,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         //blueToothTextView.Text += "\nAdapter: " + btAdapter;
 
-            blueToothListView.setMinimumHeight(0);
-            CheckBTState();
+        CheckBTState();
     }
 
     private void CheckBTState() {

@@ -36,59 +36,64 @@ private Activity _activity;
             return btDeviceList;
             }
 
-    public void Add(BtDevice item)
+    public void add(BtDevice item)
             {
             btDeviceList.add(item);
             }
 
-    public void AddList(List<BtDevice> list)
+    public void addList(List<BtDevice> list)
             {
             btDeviceList = list;
             }
 
-    public List<BtDevice> GetBlueToothList()
+    public List<BtDevice> getBlueToothList()
             {
             return btDeviceList;
             }
 
-    public int GetCount()
+    public int getCount()
             {
             return btDeviceList.size();
             }
 
-    public BtDevice GetBlueToothListItem(int position)
+    public BtDevice getBlueToothListItem(int position)
             {
             return btDeviceList.get(position);
             }
 
-    public  View GetView(int position, View convertView, ViewGroup parent)
+    public  View getView(int position, View convertView, ViewGroup parent)
     {
-    View view = convertView == null ? convertView : _activity.getLayoutInflater().inflate(R.layout.bluetooth_list_item_view, parent, false);
-    TextView deviceName = (TextView)view.findViewById(R.id.btListItemName);
-    TextView deviceType = (TextView)view.findViewById(R.id.btListItemType);
-    TextView deviceStrength = (TextView)view.findViewById(R.id.btListItemStength);
-    TextView deviceMacAddress = (TextView)view.findViewById(R.id.btListItemMacAddress);
-    TextView deviceRawData = (TextView)view.findViewById(R.id.btListItemRaw);
-    deviceName.setText(btDeviceList.get(position).Name);
-    deviceType.setText("");
-    deviceStrength.setText("");
-    deviceMacAddress.setText("");
-    BtDevice deviceInQuestion = btDeviceList.get(position);
+        View view = convertView != null ? convertView : _activity.getLayoutInflater().inflate(R.layout.bluetooth_list_item_view, parent, false);
+        TextView deviceName = (TextView)view.findViewById(R.id.btListItemName);
+        TextView deviceType = (TextView)view.findViewById(R.id.btListItemType);
+        TextView deviceStrength = (TextView)view.findViewById(R.id.btListItemStength);
+        TextView deviceMacAddress = (TextView)view.findViewById(R.id.btListItemMacAddress);
+        TextView uuid = (TextView)view.findViewById(R.id.btListItemUuid);
+        TextView major = (TextView)view.findViewById(R.id.btListItemMajor);
+        TextView minor = (TextView)view.findViewById(R.id.btListItemMinor);
+        deviceName.setText(btDeviceList.get(position).Name);
+        deviceType.setText(btDeviceList.get(position).Type);
+        //deviceStrength.setText(btDeviceList.get(position).Strength.toString());
+        deviceMacAddress.setText(btDeviceList.get(position).MacAddress);
+        uuid.setText(btDeviceList.get(position).UuidString);
+        major.setText(btDeviceList.get(position).Major);
+        minor.setText(btDeviceList.get(position).Minor);
+        BtDevice deviceInQuestion = btDeviceList.get(position);
 
-    //var dump = ObjectDumper.Dump(deviceInQuestion);
+        //var dump = ObjectDumper.Dump(deviceInQuestion);
 
-    //deviceRawData.setText(dump);
+        //deviceRawData.setText(dump);
 
 
-    return view;
+        return view;
     }
 
-    public void NotifyDataSetChanged()
+    public void notifyDataSetChanged()
     {
     super.notifyDataSetChanged();
     }
 
-    public void NotifyDataSetInvalidated()
+    public void notifyDataSetInvalidated()
     {
     super.notifyDataSetInvalidated();
     }
