@@ -16,12 +16,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
+import java.util.Timer;
 
 
 import java.io.IOException;
 import java.util.List;
+import java.util.TimerTask;
+
 import selliot.ibeaconindexer.Controller.ActionFoundController;
 import selliot.ibeaconindexer.R;
+import selliot.ibeaconindexer.Utils.BleScanRestartTask;
 
 
 public class MainActivity extends ActionBarActivity implements LocationListener {
@@ -37,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     public String _locationText;
     public String _addressText;
     private String _locationProvider;
-    boolean locationUpdated = false;
+    public BleScanRestartTask bleRestartTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +61,33 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         registerReceiver(receiver, filter); // Don't forget to unregister during onDestroy
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
-        //blueToothTextView.Text += "\nAdapter: " + btAdapter;
 
-        CheckBTState();
+        bleRestartTask = GetBluetoothScanRestartTask();
+        bleRestartTask.startUpdates();
+
+
     }
 
-    private void CheckBTState() {
-        if(btAdapter==null) {
-            return;
-        } else {
-            if (btAdapter.isEnabled()) {
-                btAdapter.startLeScan(receiver);
-            } else {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+    private BleScanRestartTask GetBluetoothScanRestartTask() {
+        return new BleScanRestartTask(new Runnable() {
+            @Override
+            public void run() {
+                if(btAdapter==null) {
+                    return;
+                } else {
+                    if (btAdapter.isEnabled()) {
+                        btAdapter.stopLeScan(receiver);
+                        btAdapter.startLeScan(receiver);
+                    }
+                }
             }
-        }
+        });
     }
+
+    public void onDestroy(){
+        unregisterReceiver(receiver);
+    }
+
 
     public void InitializeLocationManager()
     {

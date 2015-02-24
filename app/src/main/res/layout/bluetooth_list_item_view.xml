@@ -3,73 +3,51 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newOldDeviceImage"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/btListItemName" />
     <TextView
         android:id="@+id/btListItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         android:textStyle="bold"
         android:text="name" />
-    <TextView
-        android:id="@+id/btListItemType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
-        android:layout_toRightOf="@+id/btListItemName"
-        android:text="type" />
-    <TextView
-        android:id="@+id/btListItemStength"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
-        android:layout_toRightOf="@+id/btListItemType"
-        android:text="strength" />
     <TextView
         android:id="@+id/btListItemUuid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
-        android:text="macaddress"
+        android:layout_marginEnd="20dp"
+        android:text="uuid"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/btListItemStength" />
+        android:layout_toEndOf="@+id/btListItemName" />
     <TextView
         android:id="@+id/btListItemMajor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
-        android:text="macaddress"
+        android:layout_marginEnd="20dp"
+        android:text="major"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/btListItemStength" />
+        android:layout_toEndOf="@+id/btListItemUuid" />
     <TextView
         android:id="@+id/btListItemMinor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
-        android:text="macaddress"
+        android:layout_marginEnd="20dp"
+        android:text="minor"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/btListItemStength" />
+        android:layout_toEndOf="@+id/btListItemMajor" />
     <TextView
-        android:id="@+id/btListItemMacAddress"
+        android:id="@+id/btListStrength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
-        android:text="macaddress"
+        android:layout_marginEnd="20dp"
+        android:text="strength"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/btListItemStength" />
-    <TextView
-        android:id="@+id/btListItemRaw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="20dp"
-        android:text="raw"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/btListItemMacAddress" />
+        android:layout_toEndOf="@+id/btListItemMinor"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

@@ -64,26 +64,24 @@ private Activity _activity;
     public  View getView(int position, View convertView, ViewGroup parent)
     {
         View view = convertView != null ? convertView : _activity.getLayoutInflater().inflate(R.layout.bluetooth_list_item_view, parent, false);
-        TextView deviceName = (TextView)view.findViewById(R.id.btListItemName);
-        TextView deviceType = (TextView)view.findViewById(R.id.btListItemType);
-        TextView deviceStrength = (TextView)view.findViewById(R.id.btListItemStength);
-        TextView deviceMacAddress = (TextView)view.findViewById(R.id.btListItemMacAddress);
-        TextView uuid = (TextView)view.findViewById(R.id.btListItemUuid);
-        TextView major = (TextView)view.findViewById(R.id.btListItemMajor);
-        TextView minor = (TextView)view.findViewById(R.id.btListItemMinor);
-        deviceName.setText(btDeviceList.get(position).Name);
-        deviceType.setText(btDeviceList.get(position).Type);
-        //deviceStrength.setText(btDeviceList.get(position).Strength.toString());
-        deviceMacAddress.setText(btDeviceList.get(position).MacAddress);
-        uuid.setText(btDeviceList.get(position).UuidString);
-        major.setText(btDeviceList.get(position).Major);
-        minor.setText(btDeviceList.get(position).Minor);
-        BtDevice deviceInQuestion = btDeviceList.get(position);
 
-        //var dump = ObjectDumper.Dump(deviceInQuestion);
+        BtDevice currentDevice = btDeviceList.get(position);
 
-        //deviceRawData.setText(dump);
+        TextView nameView = (TextView)view.findViewById(R.id.btListItemName);
+        TextView uuidView = (TextView)view.findViewById(R.id.btListItemUuid);
+        TextView majorView = (TextView)view.findViewById(R.id.btListItemMajor);
+        TextView minorView = (TextView)view.findViewById(R.id.btListItemMinor);
+        TextView strengthView = (TextView)view.findViewById(R.id.btListStrength);
 
+        String majorString = String.valueOf(currentDevice.MajorInt);
+        String minorString = String.valueOf(currentDevice.MinorInt);
+        String strengthString = String.valueOf(currentDevice.Strength);
+
+        nameView.setText(currentDevice.Name);
+        uuidView.setText(currentDevice.UuidString);
+        majorView.setText(majorString);
+        minorView.setText(minorString);
+        strengthView.setText(strengthString);
 
         return view;
     }
