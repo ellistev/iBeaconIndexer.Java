@@ -22,6 +22,7 @@ public class BtDevice
     public String Minor;
     public int MinorInt;
     public String TimeFound;
+    public String FoundStatus; //new old or not_beacon
 
     public BtDevice(){}
 

@@ -41,6 +41,15 @@ public class ActionFoundController extends BroadcastReceiver implements android.
     public TextView BlueToothResults;
     private DatabaseFunctions database;
 
+    public final class FoundStatus {
+        public static final String NEW = "new";
+        public static final String OLD = "old";
+        public static final String NOT_BEACON = "not_beacon";
+
+        private FoundStatus(){
+        }
+    }
+
     public ActionFoundController(){}
 
     public ActionFoundController(MainActivity activity)
@@ -179,7 +188,17 @@ public class ActionFoundController extends BroadcastReceiver implements android.
             //Locations locationName = database.GetLocationName (btDevice.UuidString, btDevice.MajorInt, btDevice.MinorInt);
 
 
-            btDeviceList.add (btDevice);
+            //check if device already exists in list
+            int index = GetIndexOfBluetoothDevice(btDeviceList, btDevice);
+
+            if(index == -1){ //if doesn't exist
+                btDevice.FoundStatus = FoundStatus.NEW;
+                btDeviceList.add (btDevice);
+            }else{
+                btDevice.FoundStatus = FoundStatus.OLD;
+                btDeviceList.set(index, btDevice);
+            }
+
             adapter.notifyDataSetChanged();
 
             //only add if new, update if changed
@@ -201,7 +220,24 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
     }
 
-    protected static double calculateDistance(int txPower, double rssi) {
+        private int GetIndexOfBluetoothDevice(List<BtDevice> btDeviceList, BtDevice deviceSearchingFor) {
+
+            int counter = 0;
+
+            for (BtDevice device : btDeviceList) {
+
+                if(device.UuidString.equals(deviceSearchingFor.UuidString) &&
+                   device.MajorInt == deviceSearchingFor.MajorInt &&
+                   device.MinorInt == deviceSearchingFor.MinorInt){
+                    return counter;
+                }
+
+                counter++;
+            }
+            return -1;
+        }
+
+        protected static double calculateDistance(int txPower, double rssi) {
         if (rssi == 0) {
             return -1.0; // if we cannot determine distance, return -1.
         }

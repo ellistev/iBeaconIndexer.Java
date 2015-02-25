@@ -9,6 +9,7 @@
         android:id="@+id/newOldDeviceImage"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
+        android:src="@drawable/red_icon"
         android:layout_toStartOf="@+id/btListItemName" />
     <TextView
         android:id="@+id/btListItemName"

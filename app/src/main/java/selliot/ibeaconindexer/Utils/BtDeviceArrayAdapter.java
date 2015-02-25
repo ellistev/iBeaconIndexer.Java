@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -67,6 +68,7 @@ private Activity _activity;
 
         BtDevice currentDevice = btDeviceList.get(position);
 
+        ImageView image = (ImageView)view.findViewById(R.id.newOldDeviceImage);
         TextView nameView = (TextView)view.findViewById(R.id.btListItemName);
         TextView uuidView = (TextView)view.findViewById(R.id.btListItemUuid);
         TextView majorView = (TextView)view.findViewById(R.id.btListItemMajor);
@@ -82,6 +84,22 @@ private Activity _activity;
         majorView.setText(majorString);
         minorView.setText(minorString);
         strengthView.setText(strengthString);
+
+        image.setAdjustViewBounds(true);
+
+        switch (currentDevice.FoundStatus){
+            case "new":
+                image.setImageResource(R.drawable.green_icon);
+                break;
+            case "old":
+                image.setImageResource(R.drawable.blue_icon);
+                break;
+            case "not_beacon":
+                image.setImageResource(R.drawable.red_icon);
+                break;
+            default:break;
+
+        }
 
         return view;
     }
