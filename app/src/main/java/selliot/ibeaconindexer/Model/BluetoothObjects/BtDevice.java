@@ -21,7 +21,7 @@ public class BtDevice
     public int MajorInt;
     public String Minor;
     public int MinorInt;
-    public String TimeFound;
+    public Date TimeFound;
     public String FoundStatus; //new old or not_beacon
 
     public BtDevice(){}
@@ -51,7 +51,7 @@ public class BtDevice
         this.MajorInt = device.MajorInt;
         this.Minor = device.Minor.toString();
         this.MinorInt = device.MinorInt;
-        this.TimeFound = String.valueOf(device.ScannedTime);
+        this.TimeFound = new Date(device.ScannedTime);
 
     }
 
