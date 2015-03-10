@@ -1,6 +1,5 @@
 package selliot.ibeaconindexer.View;
 
-import android.app.FragmentManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.TimerTask;
 
 import selliot.ibeaconindexer.Controller.ActionFoundController;
-import selliot.ibeaconindexer.Model.BluetoothObjects.TaskFragment;
 import selliot.ibeaconindexer.R;
 import selliot.ibeaconindexer.Utils.BleScanRestartTask;
 
@@ -45,24 +43,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     private String _locationProvider;
     public BleScanRestartTask bleRestartTask;
 
-    private static final String TAG_TASK_FRAGMENT = "task_fragment";
-    private TaskFragment mTaskFragment;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        FragmentManager fm = getFragmentManager();
-//        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-//
-//        // If the Fragment is non-null, then it is currently being
-//        // retained across a configuration change.
-//        if (mTaskFragment == null) {
-//            mTaskFragment = new TaskFragment();
-//            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
-//        }
 
         InitializeLocationManager();
 

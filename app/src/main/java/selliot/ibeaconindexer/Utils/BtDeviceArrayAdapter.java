@@ -4,17 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import selliot.ibeaconindexer.Model.BluetoothObjects.BtDevice;
@@ -92,20 +87,19 @@ private Activity _activity;
 
         image.setAdjustViewBounds(true);
 
-        Date timeNow = new Date();
+        switch (currentDevice.FoundStatus){
+            case "new":
+                image.setImageResource(R.drawable.green_icon);
+                break;
+            case "old":
+                image.setImageResource(R.drawable.blue_icon);
+                break;
+            case "not_beacon":
+                image.setImageResource(R.drawable.red_icon);
+                break;
+            default:break;
 
-        long timeSinceLastSeen = timeNow.getSeconds() - currentDevice.TimeFound.getSeconds();
-
-        if(timeSinceLastSeen >= 0 && timeSinceLastSeen < 5){
-            image.setImageResource(R.drawable.green_icon);
-        }else if(timeSinceLastSeen >= 5 && timeSinceLastSeen < 15){
-            image.setImageResource(R.drawable.blue_icon);
-        }else if(timeSinceLastSeen >= 15){
-            image.setImageResource(R.drawable.red_icon);
-        }else{
-            image.setImageResource(0);
         }
-
 
         return view;
     }
