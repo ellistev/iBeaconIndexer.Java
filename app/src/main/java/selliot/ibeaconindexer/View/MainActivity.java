@@ -1,8 +1,10 @@
 package selliot.ibeaconindexer.View;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Address;
@@ -15,8 +17,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 
 
@@ -25,9 +34,13 @@ import java.util.List;
 import java.util.TimerTask;
 
 import selliot.ibeaconindexer.Controller.ActionFoundController;
+import selliot.ibeaconindexer.Model.BluetoothObjects.BtDevice;
+import selliot.ibeaconindexer.Model.BluetoothObjects.DatabaseFunctions;
 import selliot.ibeaconindexer.Model.BluetoothObjects.TaskFragment;
 import selliot.ibeaconindexer.R;
+import selliot.ibeaconindexer.Utils.BleListItemRefreshTask;
 import selliot.ibeaconindexer.Utils.BleScanRestartTask;
+import selliot.ibeaconindexer.Utils.BtDeviceArrayAdapter;
 
 
 public class MainActivity extends ActionBarActivity implements LocationListener {
@@ -36,7 +49,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     //private TextView blueToothTextView;
     private ListView blueToothListView;
-    private List<BluetoothDevice> btDeviceList;
     private ActionFoundController receiver = null;
     private Location _currentLocation;
     private LocationManager _locationManager;
@@ -44,15 +56,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     public String _addressText;
     private String _locationProvider;
     public BleScanRestartTask bleRestartTask;
+    public BleListItemRefreshTask bleListItemRefreshTask;
+    public List<BtDevice> btDeviceList = new ArrayList<BtDevice>();
+    private BtDeviceArrayAdapter adapter;
+    public MainActivity mBlueToothDiscover;
 
-    private static final String TAG_TASK_FRAGMENT = "task_fragment";
-    private TaskFragment mTaskFragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SetupBlueToothListView();
 
 //        FragmentManager fm = getFragmentManager();
 //        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
@@ -68,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
         blueToothListView = (ListView) findViewById(R.id.BlueToothResultsListView);
 
-        receiver = new ActionFoundController(this);
+        receiver = new ActionFoundController(this, btDeviceList, adapter);
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothDevice.ACTION_UUID);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
@@ -78,8 +93,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        //start and stop ble scan every so often, buggy on nexus devices
         bleRestartTask = GetBluetoothScanRestartTask();
         bleRestartTask.startUpdates();
+
+        bleListItemRefreshTask = GetBleListItemRefreshTaskTask();
+        bleListItemRefreshTask.startUpdates();
 
 
     }
@@ -98,6 +117,63 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 }
             }
         });
+    }
+
+    private BleListItemRefreshTask GetBleListItemRefreshTaskTask() {
+        return new BleListItemRefreshTask(new Runnable() {
+            @Override
+            public void run() {
+                  adapter.notifyDataSetChanged();
+//                ListView bleListView = (ListView)findViewById(R.id.BlueToothResults);
+//
+//                View v;
+//                ArrayList<String> mannschaftsnamen = new ArrayList<String>();
+//                //EditText et;
+//                for (int i = 0; i < bleListView.getCount(); i++) {
+//                    v = bleListView.getAdapter().getView(i, null, null);
+//                    et = (EditText) v.findViewById(i);
+//                    mannschaftsnamen.add(et.getText().toString());
+//                }
+//                Date timeNow = new Date();
+//                ImageView image = (ImageView)findViewById(R.id.newOldDeviceImage);
+//
+//                long timeSinceLastSeen = timeNow.getSeconds() - currentDevice.TimeFound.getSeconds();
+//
+//                if(timeSinceLastSeen >= 0 && timeSinceLastSeen < 5){
+//                    image.setImageResource(R.drawable.green_icon);
+//                }else if(timeSinceLastSeen >= 5 && timeSinceLastSeen < 15){
+//                    image.setImageResource(R.drawable.blue_icon);
+//                }else if(timeSinceLastSeen >= 15){
+//                    image.setImageResource(R.drawable.red_icon);
+//                }else{
+//                    image.setImageResource(0);
+//                }
+            }
+        });
+    }
+
+    public void SetupBlueToothListView(){
+
+        ListView blueToothListView = (ListView) findViewById(R.id.BlueToothResultsListView);
+
+        blueToothListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BtDevice device= adapter.getBlueToothListItem(view.getId());// ? not sure if this is the correct way to get list item
+
+                device.MacAddress = "";
+
+                adapter.notifyDataSetChanged ();
+            }
+        });
+
+        adapter = new BtDeviceArrayAdapter(this, this.getBaseContext(), android.R.layout.simple_list_item_1);
+
+        adapter.addList(btDeviceList);
+
+        blueToothListView.setAdapter(adapter);
+
     }
 
     public void onDestroy(){

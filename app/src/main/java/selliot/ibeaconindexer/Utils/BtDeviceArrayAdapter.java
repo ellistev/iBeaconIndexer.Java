@@ -94,13 +94,16 @@ private Activity _activity;
 
         Date timeNow = new Date();
 
-        long timeSinceLastSeen = timeNow.getSeconds() - currentDevice.TimeFound.getSeconds();
+        long timeSinceLastSeen = timeNow.getTime() - currentDevice.TimeFound.getTime();
+        TextView timeSinceLastSeenView = (TextView)view.findViewById(R.id.btTimeSinceLastSeen);
+        timeSinceLastSeenView.setText((String.valueOf(timeSinceLastSeen/1000.00)));
 
-        if(timeSinceLastSeen >= 0 && timeSinceLastSeen < 5){
+
+        if(timeSinceLastSeen >= 0 && timeSinceLastSeen < 5000){
             image.setImageResource(R.drawable.green_icon);
-        }else if(timeSinceLastSeen >= 5 && timeSinceLastSeen < 15){
+        }else if(timeSinceLastSeen >= 5000 && timeSinceLastSeen < 15000){
             image.setImageResource(R.drawable.blue_icon);
-        }else if(timeSinceLastSeen >= 15){
+        }else if(timeSinceLastSeen >= 15000){
             image.setImageResource(R.drawable.red_icon);
         }else{
             image.setImageResource(0);

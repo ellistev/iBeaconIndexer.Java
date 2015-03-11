@@ -3,14 +3,14 @@ package selliot.ibeaconindexer.Utils;
 import android.os.Handler;
 import android.os.Looper;
 
-public class BleScanRestartTask {
+public class BleListItemRefreshTask {
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Runnable mStatusChecker;
-    private int UPDATE_INTERVAL = 1000;
+    private int UPDATE_INTERVAL = 200;
 
-    public BleScanRestartTask(final Runnable uiUpdater) {
+    public BleListItemRefreshTask(final Runnable uiUpdater) {
         mStatusChecker = new Runnable() {
             @Override
             public void run() {
@@ -22,7 +22,7 @@ public class BleScanRestartTask {
         };
     }
 
-    public BleScanRestartTask(Runnable uiUpdater, int interval){
+    public BleListItemRefreshTask(Runnable uiUpdater, int interval){
         this(uiUpdater);
         UPDATE_INTERVAL = interval;
     }

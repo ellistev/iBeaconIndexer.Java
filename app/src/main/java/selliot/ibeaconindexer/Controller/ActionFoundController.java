@@ -52,11 +52,11 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
     public ActionFoundController(){}
 
-    public ActionFoundController(MainActivity activity)
+    public ActionFoundController(MainActivity activity, List<BtDevice> btDeviceListIn, BtDeviceArrayAdapter adapter)
     {
         mBlueToothDiscover = activity;
-        context = context;
-        SetupBlueToothListView(activity);
+        this.adapter = adapter;
+        btDeviceList = btDeviceListIn;
         //database = new DatabaseFunctions(activity.base);
     }
 
@@ -81,32 +81,6 @@ public class ActionFoundController extends BroadcastReceiver implements android.
         }
 
     }
-
-    public void SetupBlueToothListView(Activity activity){
-
-        ListView blueToothListView = (ListView) mBlueToothDiscover.findViewById(R.id.BlueToothResultsListView);
-
-        blueToothListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BtDevice device= adapter.getBlueToothListItem(view.getId());// ? not sure if this is the correct way to get list item
-
-                device.MacAddress = "";
-
-                adapter.notifyDataSetChanged ();
-            }
-        });
-
-        adapter = new BtDeviceArrayAdapter(activity, activity.getBaseContext(), android.R.layout.simple_list_item_1);
-
-        adapter.addList(btDeviceList);
-
-        blueToothListView.setAdapter(adapter);
-
-    }
-
-
 
     public List<String> getPopulatedList(List<BtDevice> newBtDeviceList) {
         List<String> myList = new ArrayList<String>();
