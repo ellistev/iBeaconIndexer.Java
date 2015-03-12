@@ -8,7 +8,7 @@ public class BleScanRestartTask {
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Runnable mStatusChecker;
-    private int UPDATE_INTERVAL = 1000;
+    private int UPDATE_INTERVAL = 5000;
 
     public BleScanRestartTask(final Runnable uiUpdater) {
         mStatusChecker = new Runnable() {

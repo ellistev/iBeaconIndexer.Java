@@ -60,27 +60,6 @@ public class ActionFoundController extends BroadcastReceiver implements android.
         //database = new DatabaseFunctions(activity.base);
     }
 
-    public void ClearBlueToothList()
-    {
-        //btDeviceList.clear();
-        //btTextList.clear();
-    }
-
-    public void PrintFullBlueToothList()
-    {
-        //TextView blueToothTextView = mBlueToothDiscover != null ? mBlueToothDiscover.FindViewById<TextView>(Resource.Id.BlueToothResults) : null;
-        //blueToothTextView.Text = "";
-        int count = 0;
-
-        for(Iterator<BtDevice> i = btDeviceList.iterator(); i.hasNext(); ) {
-            BtDevice btDevice = i.next();
-            String currentBluetoothTextViewText = BlueToothResults.getText().toString();
-            BlueToothResults.setText(currentBluetoothTextViewText += "\n" + count + ": " + btDevice.Name + ", " + btDevice.Type + ", " + btDevice.MacAddress +
-                    ", " + btDevice.Strength);
-            count++;
-        }
-
-    }
 
     public List<String> getPopulatedList(List<BtDevice> newBtDeviceList) {
         List<String> myList = new ArrayList<String>();
@@ -105,15 +84,6 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
             int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
             String uuid = intent.getParcelableExtra(BluetoothDevice.EXTRA_UUID).toString();
-
-            BlueToothResults.setText(BlueToothResults.getText().toString() + "\n  Device: " + device.getName() + ", " + device.getType() + ", " + rssi + ", " + device);
-            BtDevice btDevice = new BtDevice();
-            btDevice.Name = device.getName();
-            btDevice.Type = String.valueOf(device.getType());
-            btDevice.Strength = rssi;
-            btDevice.MacAddress = device.toString();
-            btDevice.Uuid = uuid;
-            btDeviceList.add(btDevice);
         }
         else
         {
@@ -121,11 +91,7 @@ public class ActionFoundController extends BroadcastReceiver implements android.
             {
                 BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 Parcelable[] uuidExtra = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
-                for (int i = 0; i < uuidExtra.length; i++)
-                {
-                    BlueToothResults.setText(BlueToothResults.getText() +  "\n  Device: " + device.getName() + ", " + device + ", Service: " +
-                            uuidExtra[i].toString());
-                }
+
             }
             else
             {
@@ -148,7 +114,6 @@ public class ActionFoundController extends BroadcastReceiver implements android.
         ScannedBleDevice parsedLEDevice = new BleParser().ParseRawScanRecord (device, rssi, scanRecord, null);
 
         if (parsedLEDevice != null) {
-            BlueToothResults = mBlueToothDiscover != null ? (TextView)mBlueToothDiscover.findViewById(R.id.BlueToothResults) : null;
             BtDevice btDevice = new BtDevice (parsedLEDevice);
             int newBtDeviceId;
 
@@ -185,10 +150,6 @@ public class ActionFoundController extends BroadcastReceiver implements android.
             //newGpsLocation.Altitude = currentLocation != null ? currentLocation.Altitude.ToString() : "";
             //newBtDeviceId = database.AddUpdateBtDevice (btDevice, newGpsLocation);
 
-            BlueToothResults.setText(BlueToothResults.getText() + "\n Device found: " + btDevice.UuidString + ":" + btDevice.MajorInt + ":" + btDevice.MinorInt
-                    + " You are at (" +
-                    (currentLocation != null ? currentLocation.getLatitude() : "") + ":" +
-                    (currentLocation != null ? currentLocation.getLongitude() : "")  + location + ")");
 
         }
 

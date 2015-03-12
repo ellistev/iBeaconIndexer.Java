@@ -101,9 +101,11 @@ private Activity _activity;
 
         if(timeSinceLastSeen >= 0 && timeSinceLastSeen < 5000){
             image.setImageResource(R.drawable.green_icon);
-        }else if(timeSinceLastSeen >= 5000 && timeSinceLastSeen < 15000){
+        }else if(timeSinceLastSeen >= 5000 && timeSinceLastSeen < 10000){
             image.setImageResource(R.drawable.blue_icon);
-        }else if(timeSinceLastSeen >= 15000){
+        }else if(timeSinceLastSeen >= 10000 && timeSinceLastSeen < 30000){
+            image.setImageResource(R.drawable.yellow_icon);
+        }else if(timeSinceLastSeen >= 30000){
             image.setImageResource(R.drawable.red_icon);
         }else{
             image.setImageResource(0);

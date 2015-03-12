@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.text.TextUtils;
 
 import java.text.DateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -55,6 +56,5 @@ public class BtDevice
 
     }
 
-
-
 }
+

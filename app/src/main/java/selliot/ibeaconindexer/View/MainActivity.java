@@ -24,7 +24,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Timer;
 
@@ -32,9 +35,11 @@ import java.util.Timer;
 import java.io.IOException;
 import java.util.List;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import selliot.ibeaconindexer.Controller.ActionFoundController;
 import selliot.ibeaconindexer.Model.BluetoothObjects.BtDevice;
+import selliot.ibeaconindexer.Model.BluetoothObjects.BtDeviceTimeFoundComparer;
 import selliot.ibeaconindexer.Model.BluetoothObjects.DatabaseFunctions;
 import selliot.ibeaconindexer.Model.BluetoothObjects.TaskFragment;
 import selliot.ibeaconindexer.R;
@@ -45,6 +50,8 @@ import selliot.ibeaconindexer.Utils.BtDeviceArrayAdapter;
 
 public class MainActivity extends ActionBarActivity implements LocationListener {
 
+    private static final int BLUETOOTH_RESET_TIME = 5000;
+    private static final int LIST_REFRESH_TIME = 200;
     private static int REQUEST_ENABLE_BT = 1;
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     //private TextView blueToothTextView;
@@ -55,9 +62,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     public String _locationText;
     public String _addressText;
     private String _locationProvider;
+
     public BleScanRestartTask bleRestartTask;
     public BleListItemRefreshTask bleListItemRefreshTask;
+
     public List<BtDevice> btDeviceList = new ArrayList<BtDevice>();
+    long scanStartTime;
+
     private BtDeviceArrayAdapter adapter;
     public MainActivity mBlueToothDiscover;
 
@@ -100,6 +111,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         bleListItemRefreshTask = GetBleListItemRefreshTaskTask();
         bleListItemRefreshTask.startUpdates();
 
+        scanStartTime = System.currentTimeMillis();
+
 
     }
 
@@ -116,40 +129,36 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                     }
                 }
             }
-        });
+        }, BLUETOOTH_RESET_TIME);
     }
 
     private BleListItemRefreshTask GetBleListItemRefreshTaskTask() {
         return new BleListItemRefreshTask(new Runnable() {
             @Override
             public void run() {
-                  adapter.notifyDataSetChanged();
-//                ListView bleListView = (ListView)findViewById(R.id.BlueToothResults);
-//
-//                View v;
-//                ArrayList<String> mannschaftsnamen = new ArrayList<String>();
-//                //EditText et;
-//                for (int i = 0; i < bleListView.getCount(); i++) {
-//                    v = bleListView.getAdapter().getView(i, null, null);
-//                    et = (EditText) v.findViewById(i);
-//                    mannschaftsnamen.add(et.getText().toString());
-//                }
-//                Date timeNow = new Date();
-//                ImageView image = (ImageView)findViewById(R.id.newOldDeviceImage);
-//
-//                long timeSinceLastSeen = timeNow.getSeconds() - currentDevice.TimeFound.getSeconds();
-//
-//                if(timeSinceLastSeen >= 0 && timeSinceLastSeen < 5){
-//                    image.setImageResource(R.drawable.green_icon);
-//                }else if(timeSinceLastSeen >= 5 && timeSinceLastSeen < 15){
-//                    image.setImageResource(R.drawable.blue_icon);
-//                }else if(timeSinceLastSeen >= 15){
-//                    image.setImageResource(R.drawable.red_icon);
-//                }else{
-//                    image.setImageResource(0);
-//                }
+
+                TextView scanTimeTextView = (TextView) findViewById(R.id.ScanTimeTextView);
+
+                long elapsedTimeScanning = System.currentTimeMillis() - scanStartTime;
+
+                scanTimeTextView.setText(ConvertLongTimeToClockTime(elapsedTimeScanning));
+
+
+                if(btDeviceList.size() == 0) return;
+
+                adapter.notifyDataSetChanged();
+                Collections.sort(btDeviceList, new BtDeviceTimeFoundComparer());
             }
-        });
+        }, LIST_REFRESH_TIME);
+    }
+
+    public String ConvertLongTimeToClockTime(long timeToConvert){
+        return String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(timeToConvert),
+                TimeUnit.MILLISECONDS.toMinutes(timeToConvert) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeToConvert)), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(timeToConvert) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeToConvert)));
     }
 
     public void SetupBlueToothListView(){
