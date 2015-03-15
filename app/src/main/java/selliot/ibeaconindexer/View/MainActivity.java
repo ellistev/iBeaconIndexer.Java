@@ -1,11 +1,7 @@
 package selliot.ibeaconindexer.View;
 
-import android.app.Activity;
-import android.app.FragmentManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Criteria;
@@ -19,29 +15,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Timer;
 
 
 import java.io.IOException;
 import java.util.List;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import selliot.ibeaconindexer.Controller.ActionFoundController;
 import selliot.ibeaconindexer.Model.BluetoothObjects.BtDevice;
 import selliot.ibeaconindexer.Model.BluetoothObjects.BtDeviceTimeFoundComparer;
-import selliot.ibeaconindexer.Model.BluetoothObjects.DatabaseFunctions;
-import selliot.ibeaconindexer.Model.BluetoothObjects.TaskFragment;
 import selliot.ibeaconindexer.R;
 import selliot.ibeaconindexer.Utils.BleListItemRefreshTask;
 import selliot.ibeaconindexer.Utils.BleScanRestartTask;

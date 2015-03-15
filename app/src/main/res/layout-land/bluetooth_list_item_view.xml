@@ -55,5 +55,25 @@
         android:textSize="12dp"
         android:layout_alignTop="@+id/btListItemMajor"
         android:layout_toEndOf="@+id/btListItemMajor"
-        android:layout_marginStart="83dp" />
+        android:layout_marginStart="5dp" />
+    <TextView
+        android:id="@+id/btTimeSinceLastSeen"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="timesincelastseen"
+        android:textSize="12dp"
+        android:layout_alignTop="@+id/btListStrength"
+        android:layout_toEndOf="@+id/btListStrength"
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@+id/btListStrength" />
+    <TextView
+        android:id="@+id/btNumberOfTimesSeen"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="numberoftimesseen"
+        android:textSize="12dp"
+        android:layout_alignTop="@+id/btTimeSinceLastSeen"
+        android:layout_toEndOf="@+id/btTimeSinceLastSeen"
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@+id/btTimeSinceLastSeen" />
 </RelativeLayout>

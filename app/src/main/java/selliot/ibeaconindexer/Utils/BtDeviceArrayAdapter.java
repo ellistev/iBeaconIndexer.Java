@@ -79,6 +79,7 @@ private Activity _activity;
         TextView majorView = (TextView)view.findViewById(R.id.btListItemMajor);
         TextView minorView = (TextView)view.findViewById(R.id.btListItemMinor);
         TextView strengthView = (TextView)view.findViewById(R.id.btListStrength);
+        TextView seenCountView = (TextView)view.findViewById(R.id.btNumberOfTimesSeen);
 
         String majorString = String.valueOf(currentDevice.MajorInt);
         String minorString = String.valueOf(currentDevice.MinorInt);
@@ -89,6 +90,7 @@ private Activity _activity;
         majorView.setText(majorString);
         minorView.setText(minorString);
         strengthView.setText(strengthString);
+        seenCountView.setText(String.valueOf(currentDevice.TimesSeen));
 
         image.setAdjustViewBounds(true);
 

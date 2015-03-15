@@ -4,7 +4,6 @@ package selliot.ibeaconindexer.Controller;
  * Created by Steven on 2015-02-10.
  */
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -12,9 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Parcelable;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -22,10 +18,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import selliot.ibeaconindexer.Data.Helpers.BtDeviceDbHelper;
+import selliot.ibeaconindexer.Data.Manage.BtDevicesDbManager;
 import selliot.ibeaconindexer.Model.BluetoothObjects.BtDevice;
-import selliot.ibeaconindexer.Model.BluetoothObjects.DatabaseFunctions;
 import selliot.ibeaconindexer.Model.BluetoothObjects.ScannedBleDevice;
-import selliot.ibeaconindexer.R;
 import selliot.ibeaconindexer.Utils.BleParser;
 import selliot.ibeaconindexer.Utils.BtDeviceArrayAdapter;
 import selliot.ibeaconindexer.View.MainActivity;
@@ -33,13 +29,11 @@ import selliot.ibeaconindexer.View.MainActivity;
 public class ActionFoundController extends BroadcastReceiver implements android.bluetooth.BluetoothAdapter.LeScanCallback
     {
     public List<BtDevice> btDeviceList = new ArrayList<BtDevice>();
-    private List<String> btTextList;
     private Context context;
     private BtDeviceArrayAdapter adapter;
     public MainActivity mBlueToothDiscover;
-    private List<BtDevice> newBtDeviceList;
     public TextView BlueToothResults;
-    private DatabaseFunctions database;
+    private BtDevicesDbManager btDeviceDbManager;
 
     public final class FoundStatus {
         public static final String NEW = "new";
@@ -57,6 +51,9 @@ public class ActionFoundController extends BroadcastReceiver implements android.
         mBlueToothDiscover = activity;
         this.adapter = adapter;
         btDeviceList = btDeviceListIn;
+
+        btDeviceDbManager = new BtDevicesDbManager(context);
+
         //database = new DatabaseFunctions(activity.base);
     }
 
@@ -135,6 +132,8 @@ public class ActionFoundController extends BroadcastReceiver implements android.
                 btDeviceList.add (btDevice);
             }else{
                 btDevice.FoundStatus = FoundStatus.OLD;
+                btDevice.TimesSeen = btDeviceList.get(index).TimesSeen;
+                btDevice.TimesSeen++;
                 btDeviceList.set(index, btDevice);
             }
 

@@ -40,7 +40,7 @@
         android:layout_toEndOf="@+id/btListItemName" />
     <TextView
         android:id="@+id/btListItemMinor"
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="minor"
         android:textSize="12dp"
@@ -49,22 +49,32 @@
         android:layout_marginStart="65dp" />
     <TextView
         android:id="@+id/btListStrength"
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="strength"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:layout_alignTop="@+id/btListItemMajor"
         android:layout_toEndOf="@+id/btListItemMajor"
-        android:layout_marginStart="83dp"
-        android:layout_alignBottom="@+id/btListItemMajor" />
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@+id/btListItemMinor" />
     <TextView
         android:id="@+id/btTimeSinceLastSeen"
-        android:layout_width="100dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:text="strength"
-        android:textSize="12dp"
+        android:text="timesincelastseen"
+        android:textSize="12sp"
         android:layout_alignTop="@+id/btListStrength"
         android:layout_toEndOf="@+id/btListStrength"
-        android:layout_marginStart="83dp"
+        android:layout_marginStart="5dp"
         android:layout_alignBottom="@+id/btListStrength" />
+    <TextView
+        android:id="@+id/btNumberOfTimesSeen"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="numberoftimesseen"
+        android:textSize="12dp"
+        android:layout_alignTop="@+id/btTimeSinceLastSeen"
+        android:layout_toEndOf="@+id/btTimeSinceLastSeen"
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@+id/btTimeSinceLastSeen" />
 </RelativeLayout>

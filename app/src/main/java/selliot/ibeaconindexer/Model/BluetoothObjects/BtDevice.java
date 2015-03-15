@@ -24,6 +24,7 @@ public class BtDevice
     public int MinorInt;
     public Date TimeFound;
     public String FoundStatus; //new old or not_beacon
+    public int TimesSeen;
 
     public BtDevice(){}
 
@@ -42,7 +43,7 @@ public class BtDevice
 
     public BtDevice(ScannedBleDevice device)
     {
-        this.Name = !TextUtils.isEmpty(device.DeviceName) ? device.DeviceName : "";
+        this.Name = !TextUtils.isEmpty(device.DeviceName) ? device.DeviceName : "Unknown";
         this.Type = device.getClass().toString();
         this.MacAddress = device.MacAddress;
         this.Strength = (int) device.RSSI;
@@ -53,6 +54,7 @@ public class BtDevice
         this.Minor = device.Minor.toString();
         this.MinorInt = device.MinorInt;
         this.TimeFound = new Date(device.ScannedTime);
+        this.TimesSeen = 1;
 
     }
 

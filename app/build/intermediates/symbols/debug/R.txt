@@ -353,7 +353,7 @@ int id action_menu_presenter 0x7f080003
 int id action_mode_bar 0x7f08002e
 int id action_mode_bar_stub 0x7f08002d
 int id action_mode_close_button 0x7f080020
-int id action_settings 0x7f080048
+int id action_settings 0x7f080049
 int id activity_chooser_view_content 0x7f080021
 int id always 0x7f080016
 int id beginning 0x7f080013
@@ -362,6 +362,7 @@ int id btListItemMinor 0x7f080045
 int id btListItemName 0x7f080042
 int id btListItemUuid 0x7f080043
 int id btListStrength 0x7f080046
+int id btNumberOfTimesSeen 0x7f080048
 int id btTimeSinceLastSeen 0x7f080047
 int id checkbox 0x7f080029
 int id collapseActionView 0x7f080017
