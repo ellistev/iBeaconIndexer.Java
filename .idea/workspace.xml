@@ -140,8 +140,8 @@
       <file leaf-file-name="BtDevicesDbManager.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/selliot/ibeaconindexer/Data/Manage/BtDevicesDbManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8125" vertical-offset="440" max-vertical-offset="1170">
-              <caret line="71" column="73" selection-start-line="71" selection-start-column="73" selection-end-line="71" selection-end-column="73" />
+            <state vertical-scroll-proportion="0.71875" vertical-offset="185" max-vertical-offset="1470">
+              <caret line="51" column="59" selection-start-line="51" selection-start-column="59" selection-end-line="51" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -1904,8 +1904,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/selliot/ibeaconindexer/Data/Manage/BtDevicesDbManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8125" vertical-offset="440" max-vertical-offset="1170">
-          <caret line="71" column="73" selection-start-line="71" selection-start-column="73" selection-end-line="71" selection-end-column="73" />
+        <state vertical-scroll-proportion="0.71875" vertical-offset="185" max-vertical-offset="1470">
+          <caret line="51" column="59" selection-start-line="51" selection-start-column="59" selection-end-line="51" selection-end-column="59" />
           <folding />
         </state>
       </provider>
