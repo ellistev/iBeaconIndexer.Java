@@ -66,4 +66,14 @@ public class BtDevicesDbManager {
                 sortOrder                                 // The sort order
         );
     }
+
+    public void DeleteBtDevice(int rowId){
+        // Define 'where' part of query.
+        String selection = BtDeviceContract.BtDevicesTable.COLUMN_NAME_ID + " LIKE ?";
+// Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(rowId) };
+// Issue SQL statement.
+        db.delete(table_name, selection, selectionArgs);
+    }
+
 }
