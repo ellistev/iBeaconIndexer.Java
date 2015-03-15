@@ -2,6 +2,7 @@ package selliot.ibeaconindexer.Data.Manage;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import selliot.ibeaconindexer.Data.Contracts.BtDeviceContract;
@@ -36,5 +37,33 @@ public class BtDevicesDbManager {
                 BtDeviceContract.BtDevicesTable.TABLE_NAME,
                 BtDeviceContract.BtDevicesTable.COLUMN_NAME_NAME, //nullable column, for strange sqlite purposes
                 values);
+    }
+
+    public void GetBtDevice(String uuidToFind){
+        SQLiteDatabase db = btDeviceDbHelper.getReadableDatabase();
+
+// Define a projection that specifies which columns from the database
+// you will actually use after this query.
+        String[] projection = {
+                BtDeviceContract.BtDevicesTable._ID,
+                BtDeviceContract.BtDevicesTable.COLUMN_NAME_NAME,
+                BtDeviceContract.BtDevicesTable.COLUMN_NAME_UUID
+        };
+
+// How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                BtDeviceContract.BtDevicesTable.COLUMN_NAME_TIMESSEEN + " DESC";
+
+        String selection = BtDeviceContract.BtDevicesTable.COLUMN_NAME_UUID;
+        String[] selectionArgs = new String[] {uuidToFind };
+        Cursor c = db.query(
+                BtDeviceContract.BtDevicesTable.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
     }
 }
