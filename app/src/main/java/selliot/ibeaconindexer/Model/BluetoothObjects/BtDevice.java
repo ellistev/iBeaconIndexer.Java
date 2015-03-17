@@ -25,6 +25,7 @@ public class BtDevice
     public Date TimeFound;
     public String FoundStatus; //new old or not_beacon
     public int TimesSeen;
+    public String Discoverer;
 
     public BtDevice(){}
 
@@ -55,6 +56,7 @@ public class BtDevice
         this.MinorInt = device.MinorInt;
         this.TimeFound = new Date(device.ScannedTime);
         this.TimesSeen = 1;
+        this.Discoverer = "selliott";
 
     }
 

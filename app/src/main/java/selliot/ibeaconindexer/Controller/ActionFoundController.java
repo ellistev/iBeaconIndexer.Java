@@ -52,7 +52,7 @@ public class ActionFoundController extends BroadcastReceiver implements android.
         this.adapter = adapter;
         btDeviceList = btDeviceListIn;
 
-        btDeviceDbManager = new BtDevicesDbManager(context);
+        btDeviceDbManager = new BtDevicesDbManager(activity.getBaseContext());
 
         //database = new DatabaseFunctions(activity.base);
     }
@@ -112,43 +112,24 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
         if (parsedLEDevice != null) {
             BtDevice btDevice = new BtDevice (parsedLEDevice);
-            int newBtDeviceId;
-
-            //get gps location and
-            String location = null;
-            try {
-                location = mBlueToothDiscover.CheckLocation ();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //Locations locationName = database.GetLocationName (btDevice.UuidString, btDevice.MajorInt, btDevice.MinorInt);
-
 
             //check if device already exists in list
             int index = GetIndexOfBluetoothDevice(btDeviceList, btDevice);
-
+            btDeviceDbManager.open();
             if(index == -1){ //if doesn't exist
                 btDevice.FoundStatus = FoundStatus.NEW;
                 btDeviceList.add (btDevice);
+                long newId = btDeviceDbManager.addBtDevice(btDevice);
             }else{
                 btDevice.FoundStatus = FoundStatus.OLD;
                 btDevice.TimesSeen = btDeviceList.get(index).TimesSeen;
                 btDevice.TimesSeen++;
                 btDeviceList.set(index, btDevice);
+                int count = btDeviceDbManager.updateBtDevice(btDevice);
             }
+            btDeviceDbManager.close();
 
             adapter.notifyDataSetChanged();
-
-            //only add if new, update if changed
-            Location currentLocation = mBlueToothDiscover.GetCurrentLocationObject ();
-
-
-            //GPSLocation newGpsLocation = new GPSLocation();
-            //newGpsLocation.LatitudeLongitude = String.Format ("{0},{1}", currentLocation != null ? currentLocation.Latitude.ToString() : "", currentLocation != null ? currentLocation.Longitude.ToString() : "");
-            ////newGpsLocation.Address = location;
-            //newGpsLocation.Altitude = currentLocation != null ? currentLocation.Altitude.ToString() : "";
-            //newBtDeviceId = database.AddUpdateBtDevice (btDevice, newGpsLocation);
-
 
         }
 

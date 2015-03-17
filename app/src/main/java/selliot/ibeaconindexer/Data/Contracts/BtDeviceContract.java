@@ -22,8 +22,9 @@ public final class BtDeviceContract {
         public static final String COLUMN_NAME_MAJOR = "major";
         public static final String COLUMN_NAME_MINOR = "minor";
         public static final String COLUMN_NAME_TIMEFOUND = "timefound";
-        public static final String COLUMN_NAME_FOUNDSTATUS = "soundstatus";
+        public static final String COLUMN_NAME_FOUNDSTATUS = "foundstatus";
         public static final String COLUMN_NAME_TIMESSEEN = "timesseen";
+        public static final String COLUMN_NAME_DISCOVERER = "discoverer";
 
         private static final String TEXT_TYPE = " TEXT";
         private static final String COMMA_SEP = ",";
@@ -41,6 +42,7 @@ public final class BtDeviceContract {
                         COLUMN_NAME_TIMEFOUND + TEXT_TYPE + COMMA_SEP +
                         COLUMN_NAME_FOUNDSTATUS + TEXT_TYPE + COMMA_SEP +
                         COLUMN_NAME_TIMESSEEN + TEXT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_DISCOVERER + TEXT_TYPE +
                 " )";
 
         public static final String SQL_DELETE_ENTRIES =
