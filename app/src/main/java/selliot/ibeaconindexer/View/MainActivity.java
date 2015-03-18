@@ -65,21 +65,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SetupBlueToothListView();
 
-//        FragmentManager fm = getFragmentManager();
-//        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-//
-//        // If the Fragment is non-null, then it is currently being
-//        // retained across a configuration change.
-//        if (mTaskFragment == null) {
-//            mTaskFragment = new TaskFragment();
-//            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
-//        }
+
 
         InitializeLocationManager();
 
         blueToothListView = (ListView) findViewById(R.id.BlueToothResultsListView);
+
+        SetupBlueToothListView();//must happen before receiver is instantiated
 
         receiver = new ActionFoundController(this, btDeviceList, adapter);
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -87,9 +80,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        btDeviceList = receiver.getPopulatedListFromDatabase();
+        receiver.UpdateBtList(btDeviceList);
+        adapter.addList(btDeviceList);
+
         registerReceiver(receiver, filter); // Don't forget to unregister during onDestroy
 
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
+
 
         //start and stop ble scan every so often, buggy on nexus devices
         bleRestartTask = GetBluetoothScanRestartTask();
@@ -133,8 +131,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
                 if(btDeviceList.size() == 0) return;
 
+                if (btDeviceList.size() > 1)Collections.sort(btDeviceList, new BtDeviceTimeFoundComparer());
+
                 adapter.notifyDataSetChanged();
-                Collections.sort(btDeviceList, new BtDeviceTimeFoundComparer());
+
             }
         }, LIST_REFRESH_TIME);
     }
@@ -152,21 +152,19 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
         ListView blueToothListView = (ListView) findViewById(R.id.BlueToothResultsListView);
 
-        blueToothListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BtDevice device= adapter.getBlueToothListItem(view.getId());// ? not sure if this is the correct way to get list item
-
-                device.MacAddress = "";
-
-                adapter.notifyDataSetChanged ();
-            }
-        });
+//        blueToothListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                BtDevice device= adapter.getBlueToothListItem(view.getId());// ? not sure if this is the correct way to get list item
+//
+//                device.MacAddress = "";
+//
+//                adapter.notifyDataSetChanged ();
+//            }
+//        });
 
         adapter = new BtDeviceArrayAdapter(this, this.getBaseContext(), android.R.layout.simple_list_item_1);
-
-        adapter.addList(btDeviceList);
 
         blueToothListView.setAdapter(adapter);
 

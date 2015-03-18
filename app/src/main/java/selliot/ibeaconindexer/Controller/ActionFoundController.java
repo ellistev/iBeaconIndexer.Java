@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Location;
 import android.os.Parcelable;
 import android.widget.TextView;
@@ -35,7 +36,10 @@ public class ActionFoundController extends BroadcastReceiver implements android.
     public TextView BlueToothResults;
     private BtDevicesDbManager btDeviceDbManager;
 
-    public final class FoundStatus {
+
+
+
+        public final class FoundStatus {
         public static final String NEW = "new";
         public static final String OLD = "old";
         public static final String NOT_BEACON = "not_beacon";
@@ -54,7 +58,23 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
         btDeviceDbManager = new BtDevicesDbManager(activity.getBaseContext());
 
-        //database = new DatabaseFunctions(activity.base);
+    }
+    public void UpdateBtList(List<BtDevice> btDeviceList) {
+        this.btDeviceList = btDeviceList;
+        adapter.notifyDataSetChanged();
+    }
+
+    public List<BtDevice> getPopulatedListFromDatabase() {
+        List<BtDevice> listOfBtDevicesFromDatabase = new ArrayList<BtDevice>();
+
+        btDeviceDbManager.open();
+
+        //btDeviceDbManager.deleteAllBtDevices(); //only to wipe the db until i add a button or something
+        listOfBtDevicesFromDatabase = btDeviceDbManager.getAllBtDevices();
+
+        btDeviceDbManager.close();
+
+        return listOfBtDevicesFromDatabase;
     }
 
 
@@ -129,7 +149,7 @@ public class ActionFoundController extends BroadcastReceiver implements android.
             }
             btDeviceDbManager.close();
 
-            adapter.notifyDataSetChanged();
+            if(adapter != null) adapter.notifyDataSetChanged();
 
         }
 
@@ -137,9 +157,13 @@ public class ActionFoundController extends BroadcastReceiver implements android.
 
         private int GetIndexOfBluetoothDevice(List<BtDevice> btDeviceList, BtDevice deviceSearchingFor) {
 
-            int counter = 0;
+            int counter = -1;
+
+            if(btDeviceList.size() == 0) return -1;
 
             for (BtDevice device : btDeviceList) {
+
+                counter++;
 
                 if(device.UuidString.equals(deviceSearchingFor.UuidString) &&
                    device.MajorInt == deviceSearchingFor.MajorInt &&
@@ -147,7 +171,7 @@ public class ActionFoundController extends BroadcastReceiver implements android.
                     return counter;
                 }
 
-                counter++;
+
             }
             return -1;
         }
